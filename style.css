@@ -929,9 +929,10 @@ body.invitation-opened .bg-flower-bottom-left,
   box-shadow: 0 0 8px var(--gold-primary);
 }
 
-/* Bagian Bawah Bingkai (Petunjuk Scroll Tanpa Batas) */
-.gallery-footer-controls {
-  margin-top: 1rem;
+/* Bagian Atas Bingkai (Petunjuk Scroll Tanpa Batas ditaruh di atas foto) */
+.gallery-header-controls {
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;

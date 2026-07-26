@@ -360,25 +360,28 @@ document.addEventListener("DOMContentLoaded", function () {
           let name = "";
           let message = "";
           
-          if (row.length >= 3 && row[1]) {
+          if (row && row.length >= 2) {
+            // Kolom A = Waktu, Kolom B = Nama
             timeStr = row[0]?.v || row[0]?.f || "Hari ini";
             name = row[1]?.v || "";
             
-            // Logika pintar: Cek apakah kolom C (index 2) adalah status kehadiran (Hadir / Tidak Hadir / Ragu-ragu)
-            const col2Str = String(row[2]?.v || "");
-            if (col2Str.includes("Hadir") || col2Str.includes("Ragu") || col2Str.includes("Orang")) {
-              // Format lengkap 5 kolom: A=Timestamp, B=Nama, C=Kehadiran, D=Jumlah Tamu, E=Ucapan (atau 4 kolom: A, B, C, D=Ucapan)
-              message = row[4]?.v || row[3]?.v || "";
+            // Kolom E = Ucapan (index 4). Kita cek langsung kolom ke-5 (index 4)
+            if (row[4] && (row[4].v || row[4].f)) {
+              message = row[4].v || row[4].f;
+            } 
+            // Fallback untuk baris lama jika dulunya hanya 3 kolom (A=Waktu, B=Nama, C=Ucapan)
+            else if (row[2] && row[2].v && !["Hadir", "Tidak Hadir", "Ragu-ragu", "-", "0"].includes(String(row[2].v).trim())) {
+              message = row[2].v;
+            } 
+            // Fallback jika berada di kolom ke-4 (index 3)
+            else if (row[3] && row[3].v && !String(row[3].v).toLowerCase().includes("orang") && isNaN(row[3].v)) {
+              message = row[3].v;
             } else {
-              // Format 3 kolom standar sebelumnya: A=Timestamp, B=Nama, C=Ucapan
-              message = row[2]?.v || "";
+              message = row[4]?.v || "Selamat berbahagia dan teriring doa terbaik!";
             }
-          } else if (row.length === 2 && row[0] && row[1]) {
-            name = row[0]?.v || "";
-            message = row[1]?.v || "";
-          } else if (row[0]) {
+          } else if (row && row.length === 1 && row[0]) {
             name = row[0]?.v || "Tamu";
-            message = row[1]?.v || "Selamat berbahagia!";
+            message = "Selamat berbahagia!";
           }
           
           // Cek jangan tampilkan jika baris tersebut adalah Header tabel (seperti kata "Nama", "Timestamp", "Kehadiran", atau "Ucapan")
@@ -539,17 +542,22 @@ document.addEventListener("DOMContentLoaded", function () {
       savedWishes.unshift({ name, message, time: "Hari ini" });
       localStorage.setItem("wedding_wishes_bimi_yunita", JSON.stringify(savedWishes));
 
-      // 3. Kirim DATA LENGKAP RSVP (Nama, Kehadiran, Jumlah Tamu, Doa) ke Google Sheets internal!
+      // 3. Kirim DATA LENGKAP RSVP ke Google Sheets (Kolom A=Waktu, B=Nama, C=Kehadiran, D=Jumlah Tamu, E=Ucapan)
       if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== "INSERT_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE") {
         fetch(APPS_SCRIPT_URL, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            waktu: new Date().toLocaleString("id-ID"),
             timestamp: new Date().toLocaleString("id-ID"),
+            nama: name,
             name: name,
+            kehadiran: attendance,
             attendance: attendance,
+            jumlahTamu: guestCount,
             guestCount: guestCount,
+            ucapan: message,
             message: message
           })
         }).catch(e => console.warn("Koneksi ke spreadsheet backend lambat/offline:", e));

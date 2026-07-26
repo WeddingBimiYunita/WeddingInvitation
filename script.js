@@ -331,7 +331,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
   // (OPSIONAL) Untuk mencatat pesan baru dari tamu langsung ke Spreadsheet secara otomatis,
   // silakan paste URL Web App Google Apps Script hasil deploy ke variabel ini:
-  const APPS_SCRIPT_URL = "INSERT_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE"; 
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhsisva-BVvRhebeh3OQHjTTauXal3MwI8uJVx8wGIZVjIg8MB824U2109v-C3SQE/exec"; 
 
   // Muat ucapan dari Google Sheets secara langsung (agar jika mempelai menghapus doa yang kurang sesuai di sheet, 
   // doa tersebut juga otomatis lenyap dari layar web undangan tamu)

@@ -1,0 +1,1434 @@
+/* ==========================================
+   VARIABEL & RESET DASAR (Design Tokens - GPU Optimized)
+   ========================================== */
+:root {
+  --bg-main: #f8f9fa;
+  --bg-white: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --bg-card: rgba(255, 255, 255, 0.76);
+  
+  --text-dark: #2c3e50;
+  --text-muted: #5a6b7c;
+  --text-light: #8090a0;
+  
+  --gold-primary: #c5a880;
+  --gold-dark: #9a7d54;
+  --gold-light: #e6d5bc;
+  --gold-gradient: linear-gradient(135deg, #dfc69e 0%, #b8925c 50%, #e8d7ba 100%);
+  --gold-glow: rgba(197, 168, 128, 0.25);
+
+  /* Font Mewah Editorial (Cormorant Garamond) */
+  --font-body: 'Outfit', sans-serif;
+  --font-luxury: 'Cormorant Garamond', serif;
+  --font-arabic: 'Amiri', serif;
+
+  --shadow-soft: 0 8px 24px rgba(44, 62, 80, 0.05);
+  --shadow-gold: 0 8px 22px rgba(197, 168, 128, 0.22);
+  --shadow-modal: 0 15px 40px rgba(0, 0, 0, 0.12);
+
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  
+  --nav-height: 70px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: #eaecef;
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.locked {
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ==========================================
+   ORNAMEN BUNGA SUDUT KIRI BAWAH (TETAP MUNCUL DI SETIAP PAGE)
+   ========================================== */
+.bg-flower-bottom-left {
+  position: fixed !important;
+  bottom: calc(var(--nav-height) - 10px);
+  left: 0;
+  width: 145px;
+  max-width: 32vw;
+  z-index: 95; /* Muncul terus di sudut kiri bawah lapisan atas (Kaya waktu awal dulu), di atas konten namun di bawah navbar */
+  pointer-events: none; /* Sangat penting: klik akan menembus ke konten di bawahnya sehingga tidak mengganggu tombol & teks! */
+  opacity: 0; /* Tersembunyi di opening / sebelum undangan dibuka */
+  transform: translate(-6px, 6px) translateZ(0);
+  transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 521px) {
+  .bg-flower-bottom-left {
+    left: calc(50% - 250px);
+  }
+}
+
+/* Muncul mulus (smooth) ketika tombol Buka Undangan diklik dan selalu setia menemani di setiap page */
+body.invitation-opened .bg-flower-bottom-left,
+.invitation-opened .bg-flower-bottom-left {
+  opacity: 0.9 !important;
+  transform: translate(0, 0) translateZ(0);
+}
+
+/* ==========================================
+   MOBILE-FIRST MAIN CONTAINER & BACKGROUNDS
+   ========================================== */
+.main-container {
+  max-width: 500px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  /* Background Foto Transparan Selalu Hadir Mengiringi Latar Belakang Seluruh Halaman (Di Luar Container Box) */
+  background-image: linear-gradient(180deg, rgba(248, 249, 250, 0.76) 0%, rgba(248, 249, 250, 0.76) 100%),
+                    url('https://weddingbimiyunita.github.io/AssetsBackground/AWAL%20DAN%20BACKGROUND%20TRANSPARAN.webp');
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed; /* Foto tetap terpaku indah di belakang saat seluruh sesi bergulir */
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: calc(var(--nav-height) + 20px);
+  transform: translateZ(0);
+  z-index: 0;
+}
+
+/* Foto Latar Belakang Transparan Tetap Ada Mengiringi Konten yang Bergerak (Fallback / Tambahan Keserasian) */
+.bg-overlay {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateZ(0);
+  width: 100%;
+  max-width: 500px;
+  height: 100vh;
+  background-image: url('https://weddingbimiyunita.github.io/AssetsBackground/AWAL%20DAN%20BACKGROUND%20TRANSPARAN.webp');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  opacity: 0.16; /* Menjaga konsistensi keindahan di seluruh viewport */
+  z-index: 1;
+  pointer-events: none;
+}
+
+.main-container > section,
+.main-container > footer {
+  position: relative;
+  z-index: 2; /* Teks & kartu berada dengan mulus di atas background page */
+  padding: 3.5rem 1.5rem;
+}
+
+/* Foto Background Transparan di Dalam Container Box (Acara, Lokasi, Galeri, Ucapan, Quran, Penutup) 
+   Catatan: Mempelai & Doa Pengantin dikecualikan agar boksnya mulus & bersih seperti semula! */
+.event-card-unified,
+.location-card,
+.gallery-single-frame,
+.rsvp-card,
+.quran-card,
+.penutup-content {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.80) 0%, rgba(248, 245, 239, 0.86) 100%),
+              url('https://weddingbimiyunita.github.io/AssetsBackground/AWAL%20DAN%20BACKGROUND%20TRANSPARAN.webp') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.3s ease, opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ==========================================
+   ANIMASI REVEAL SAAT SCROLL (Ringan di GPU)
+   ========================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+  will-change: auto; /* Bersihkan memori GPU setelah selesai animasi */
+}
+
+/* ==========================================
+   COVER PEMBUKA (Envelope Modal)
+   ========================================== */
+.cover-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: var(--bg-main);
+  background-image: linear-gradient(180deg, rgba(248, 249, 250, 0.92) 0%, rgba(255, 255, 255, 0.96) 100%),
+                    url('https://weddingbimiyunita.github.io/AssetsBackground/AWAL%20DAN%20BACKGROUND%20TRANSPARAN.webp');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.7s ease;
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.15);
+  transform: translateZ(0);
+}
+
+.cover-modal.opened {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Blur dikoreksi dari 14px ke 8px agar 70% lebih lancar saat diletupkan di HP */
+.cover-content {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  background: var(--bg-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 2.2rem 1.4rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(197, 168, 128, 0.35);
+  box-shadow: var(--shadow-modal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cover-badge {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 3.5px;
+  color: var(--gold-dark);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.cover-badge::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 1.5px;
+  background: var(--gold-primary);
+  margin: 8px auto 0;
+}
+
+.cover-portrait-wrap {
+  position: relative;
+  width: 175px;
+  height: 220px;
+  margin: 0 auto 1.6rem;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: 0 14px 35px rgba(197, 168, 128, 0.3), 0 6px 18px rgba(0, 0, 0, 0.1);
+  transform: translateZ(0);
+}
+
+.cover-photo-frameless {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.cover-content:hover .cover-photo-frameless {
+  transform: scale(1.03);
+}
+
+.portrait-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.22) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.wedding-title {
+  font-family: var(--font-luxury);
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  margin-bottom: 1.4rem;
+  text-transform: uppercase;
+}
+
+.wedding-title span {
+  display: block;
+  font-family: var(--font-luxury);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  letter-spacing: -0.5px;
+  margin-top: 4px;
+  text-transform: none;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.guest-card {
+  width: 100%;
+  background: rgba(248, 249, 250, 0.88);
+  border: 1px solid rgba(197, 168, 128, 0.2);
+  padding: 0.95rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+}
+
+.guest-salutation {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.guest-name {
+  font-family: var(--font-luxury);
+  font-size: clamp(1.2rem, 5.5vw, 1.55rem);
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 5px 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3;
+}
+
+.guest-note {
+  font-size: 0.72rem;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.btn-open-invitation {
+  background: var(--gold-gradient);
+  color: #ffffff;
+  border: none;
+  padding: 0.85rem 1.8rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: var(--shadow-gold);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  width: 100%;
+}
+
+.btn-open-invitation:hover,
+.btn-open-invitation:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(197, 168, 128, 0.4);
+}
+
+.btn-open-invitation:active {
+  transform: translateY(1px);
+}
+
+/* ==========================================
+   FLOATING AUDIO CONTROL BUTTON
+   ========================================== */
+.music-btn {
+  position: fixed;
+  bottom: calc(var(--nav-height) + 18px);
+  right: calc(50% - 235px);
+  z-index: 998;
+  background: var(--bg-white);
+  border: 2px solid var(--gold-primary);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-dark);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@media (max-width: 500px) {
+  .music-btn {
+    right: 15px;
+  }
+}
+
+.music-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0);
+}
+
+.music-disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: spinDisc 4s linear infinite;
+}
+
+.music-btn.paused .music-disc {
+  animation-play-state: paused;
+  opacity: 0.5;
+}
+
+@keyframes spinDisc {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   SEKSI 1: SALAM & PROFIL MEMPELAI
+   ========================================== */
+.section-mempelai {
+  text-align: center;
+}
+
+/* Latar belakang bagian mempelai diperkaya dengan foto transparan mengelilingi kartu profil */
+.section-mempelai-profil {
+  text-align: center;
+  background-image: linear-gradient(180deg, rgba(248, 249, 250, 0.45) 0%, rgba(248, 249, 250, 0.60) 50%, rgba(248, 249, 250, 0.45) 100%),
+                    url('https://weddingbimiyunita.github.io/AssetsBackground/AWAL%20DAN%20BACKGROUND%20TRANSPARAN.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.section-header {
+  margin-bottom: 2.2rem;
+}
+
+.salam-arabic {
+  font-family: var(--font-arabic);
+  font-size: 1.6rem;
+  color: var(--gold-dark);
+  margin-bottom: 0.4rem;
+  line-height: 1.8;
+}
+
+.salam-latin {
+  font-family: var(--font-luxury);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--text-dark);
+  margin-bottom: 0.9rem;
+}
+
+.pembuka-text {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.profile-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 2.2rem 1.2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(197, 168, 128, 0.25);
+  box-shadow: var(--shadow-soft);
+  margin: 1.5rem 0;
+  position: relative;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  text-align: center; /* Pastikan teks di dalam kartu mempelai rata tengah */
+}
+
+.profile-card:hover {
+  transform: translateY(-3px);
+}
+
+.photo-frame-oval {
+  width: 175px;
+  height: 230px;
+  margin: 0 auto 1.4rem;
+  border-radius: 999px;
+  position: relative;
+  padding: 6px;
+  background: var(--bg-white);
+  box-shadow: var(--shadow-gold);
+}
+
+.photo-frame-oval img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 999px;
+}
+
+.golden-ring-oval {
+  position: absolute;
+  inset: -3px;
+  border-radius: 999px;
+  border: 1.5px solid var(--gold-primary);
+  pointer-events: none;
+}
+
+.bride-name {
+  font-family: var(--font-luxury);
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.groom-name {
+  font-size: clamp(1.5rem, 6vw, 2.2rem);
+}
+
+.one-line-name {
+  font-size: clamp(1.15rem, 4.7vw, 1.7rem);
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+.parents-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.ampersand-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.ampersand-divider span {
+  font-family: var(--font-luxury);
+  font-style: italic;
+  font-size: 2.6rem;
+  color: var(--gold-dark);
+  line-height: 1;
+}
+
+/* ==========================================
+   SEKSI 2: DETAIL ACARA & COUNTDOWN
+   ========================================== */
+.section-acara {
+  text-align: center;
+  background: linear-gradient(180deg, rgba(248,249,250,0) 0%, rgba(235,229,219,0.3) 50%, rgba(248,249,250,0) 100%);
+}
+
+.section-title-wrap {
+  margin-bottom: 1.6rem;
+}
+
+.sub-heading {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--gold-dark);
+  font-weight: 600;
+  display: block;
+}
+
+.heading-title {
+  font-family: var(--font-luxury);
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-top: 2px;
+}
+
+.intro-acara {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  max-width: 400px;
+  margin: 0 auto 2rem;
+}
+
+.event-card-unified {
+  background: var(--bg-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(197, 168, 128, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 2.2rem 1.4rem;
+  box-shadow: var(--shadow-gold);
+  margin-bottom: 2.2rem;
+  position: relative;
+}
+
+.event-circle-bg {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 1.6rem;
+  border: 2px solid var(--gold-primary);
+  box-shadow: 0 6px 16px rgba(197, 168, 128, 0.3);
+}
+
+.event-circle-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.event-item {
+  padding: 0.4rem 0;
+}
+
+.event-title {
+  font-family: var(--font-luxury);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.4rem;
+}
+
+.event-date {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--gold-dark);
+  margin-bottom: 0.3rem;
+}
+
+.event-time {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.event-divider-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.3rem 0;
+}
+
+.event-divider-line::before,
+.event-divider-line::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(197, 168, 128, 0.5), transparent);
+  max-width: 110px;
+}
+
+.divider-icon {
+  color: var(--gold-dark);
+  font-size: 0.95rem;
+  margin: 0 10px;
+}
+
+.countdown-section {
+  background: var(--text-dark);
+  color: #ffffff;
+  padding: 2rem 1.4rem;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--gold-primary);
+  box-shadow: 0 10px 28px rgba(44, 62, 80, 0.18);
+}
+
+.countdown-title {
+  font-family: var(--font-luxury);
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  margin-bottom: 1.3rem;
+}
+
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.timer-box {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(197, 168, 128, 0.25);
+  padding: 0.75rem 0.3rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timer-value {
+  font-family: var(--font-luxury);
+  font-size: clamp(1.5rem, 4.5vw, 1.9rem);
+  font-weight: 700;
+  color: var(--gold-light);
+  line-height: 1.1;
+}
+
+.timer-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4px;
+}
+
+/* ==========================================
+   SEKSI LOKASI & QUICK ACTION BUTTONS
+   ========================================== */
+.section-lokasi {
+  padding-top: 1rem !important;
+  text-align: center;
+}
+
+.location-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(197, 168, 128, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 2.2rem 1.4rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.location-icon {
+  margin-bottom: 0.8rem;
+}
+
+.location-heading {
+  font-family: var(--font-luxury);
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.6rem;
+}
+
+.location-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  max-width: 360px;
+  margin: 0 auto 1.6rem;
+}
+
+.quick-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0.85rem 1.3rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: all 0.25s ease;
+  width: 100%;
+}
+
+.btn-calendar {
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+  border: 1.5px solid var(--gold-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.btn-calendar:hover {
+  background-color: #fbf9f6;
+  border-color: var(--gold-dark);
+  transform: translateY(-2px);
+}
+
+.btn-maps {
+  background: var(--gold-gradient);
+  color: #ffffff;
+  border: none;
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-maps:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(197, 168, 128, 0.4);
+}
+
+/* ==========================================
+   SEKSI 3: GALERI FOTO ( 1 x 1 Scroll Down dalam Satu Bingkai )
+   ========================================== */
+.section-galeri {
+  text-align: center;
+}
+
+.gallery-single-frame {
+  position: relative;
+  width: 100%;
+  max-width: 360px; /* Ukuran proporsional & elegan di HP, Tablet, maupun Laptop/Komputer */
+  margin: 1.5rem auto 0;
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--gold-primary);
+  box-shadow: 0 16px 36px rgba(44, 62, 80, 0.16), 0 6px 20px rgba(197, 168, 128, 0.32);
+}
+
+.gallery-viewport {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 450px;
+  max-height: 65vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.15);
+  background-color: #161f28; /* Latar gelap eksklusif agar foto bersinar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.gallery-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #161f28;
+}
+
+.gallery-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Mencegah foto kepotong / kebesaran di layar Tablet dan Laptop */
+  object-position: center;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.slide-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--gold-light);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(197, 168, 128, 0.4);
+  z-index: 5;
+}
+
+.gallery-hover-icon {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(44, 62, 80, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 6;
+}
+
+.gallery-slide:hover img {
+  transform: scale(1.04);
+}
+
+.gallery-slide:hover .gallery-hover-icon {
+  opacity: 1;
+}
+
+/* Indikator Titik (Dots) di Sisi Kanan Bingkai */
+.gallery-indicators {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+  background: rgba(22, 31, 40, 0.6);
+  padding: 8px 6px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.indicator-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  padding: 0;
+}
+
+.indicator-dot.active {
+  background: var(--gold-light);
+  height: 22px;
+  border-radius: 10px;
+  box-shadow: 0 0 8px var(--gold-primary);
+}
+
+/* Bagian Bawah Bingkai (Petunjuk Scroll Tanpa Batas) */
+.gallery-footer-controls {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-hint-text {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.bounce-arrow {
+  display: inline-block;
+  color: var(--gold-dark);
+  font-weight: 800;
+  animation: bounceDown 1.5s infinite;
+}
+
+@keyframes bounceDown {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-5px); }
+  60% { transform: translateY(-3px); }
+}
+
+/* Adaptif untuk Tablet dan Laptop / Komputer Desktop */
+@media (min-width: 600px) {
+  .gallery-single-frame {
+    max-width: 360px; /* Pertahankan ukuran harmonis & tidak melebar raksasa */
+    padding: 12px;
+  }
+  .gallery-viewport {
+    height: 460px; /* Pas dan indah dipantengin di PC/Tablet */
+  }
+}
+
+/* ==========================================
+   KUTIPAN AYAT AL-QUR'AN
+   ========================================== */
+.section-quran {
+  text-align: center;
+}
+
+.quran-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--gold-primary);
+  padding: 2.5rem 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.quran-ornament {
+  font-family: var(--font-luxury);
+  font-size: 3.5rem;
+  line-height: 0.5;
+  color: var(--gold-primary);
+  margin-bottom: 0.8rem;
+}
+
+.quran-arabic {
+  font-family: var(--font-arabic);
+  font-size: 1.45rem;
+  color: var(--text-dark);
+  line-height: 2.2;
+  margin-bottom: 1.2rem;
+}
+
+.quran-translation {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-style: italic;
+  margin-bottom: 1.2rem;
+}
+
+.quran-surah {
+  font-family: var(--font-luxury);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--gold-dark);
+}
+
+/* ==========================================
+   RSVP (UCAPAN & DOA RESTU)
+   ========================================== */
+.section-rsvp {
+  text-align: center;
+}
+
+.rsvp-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(197, 168, 128, 0.35);
+  padding: 2.2rem 1.4rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  text-align: left;
+}
+
+.rsvp-intro {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 1.6rem;
+  line-height: 1.6;
+}
+
+.rsvp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.form-group input,
+.form-group textarea {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  color: var(--text-dark);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(197, 168, 128, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--gold-dark);
+  box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.18);
+}
+
+.btn-submit-rsvp {
+  background: var(--gold-gradient);
+  color: #ffffff;
+  border: none;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: var(--shadow-gold);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  margin-top: 0.5rem;
+}
+
+.btn-submit-rsvp:hover,
+.btn-submit-rsvp:focus {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.sheet-info {
+  margin-top: 1.4rem;
+  text-align: center;
+  border-top: 1px dashed rgba(197, 168, 128, 0.3);
+  padding-top: 1.2rem;
+}
+
+.sheet-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.sheet-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.wish-list-wrap {
+  margin-top: 2rem;
+}
+
+.wish-heading {
+  font-family: var(--font-luxury);
+  font-size: 1.25rem;
+  color: var(--text-dark);
+  margin-bottom: 1.2rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.wish-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.wish-item {
+  display: flex;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  animation: fadeInWish 0.4s ease;
+}
+
+@keyframes fadeInWish {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wish-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gold-gradient);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wish-text-wrap {
+  flex: 1;
+}
+
+.wish-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.wish-author {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text-dark);
+}
+
+.wish-time {
+  font-size: 0.72rem;
+  color: var(--text-light);
+}
+
+.wish-body {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ==========================================
+   DOA UNTUK PENGANTIN
+   ========================================== */
+.section-doa-pengantin {
+  text-align: center;
+}
+
+.doa-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--gold-primary);
+  padding: 2.5rem 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.doa-heading-title {
+  font-family: var(--font-luxury);
+  font-size: 1.8rem;
+  color: var(--text-dark);
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+}
+
+/* ==========================================
+   PENUTUP & SALAM
+   ========================================== */
+.section-penutup {
+  text-align: center;
+  padding-bottom: 2rem !important;
+}
+
+.penutup-content {
+  background: var(--bg-card);
+  backdrop-filter: blur(6px);
+  padding: 2.2rem 1.4rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(197, 168, 128, 0.22);
+  box-shadow: var(--shadow-soft);
+}
+
+.penutup-text {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 1.8rem;
+}
+
+.salam-penutup-arabic {
+  font-family: var(--font-arabic);
+  font-size: 1.55rem;
+  color: var(--gold-dark);
+  margin-bottom: 0.3rem;
+  line-height: 1.8;
+}
+
+.salam-penutup-latin {
+  font-family: var(--font-luxury);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--text-dark);
+  margin-bottom: 2.2rem;
+}
+
+.kami-yang {
+  font-size: 0.88rem;
+  color: var(--text-light);
+  margin-bottom: 0.3rem;
+}
+
+.couple-signature {
+  font-family: var(--font-luxury);
+  font-size: 2.7rem;
+  color: var(--text-dark);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.couple-family {
+  font-size: 0.85rem;
+  color: var(--gold-dark);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* ==========================================
+   FOOTER (PALING BAWAH)
+   ========================================== */
+.site-footer {
+  text-align: center;
+  padding: 1.5rem 1rem 3.5rem !important;
+  background-color: transparent;
+}
+
+.copyright-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ==========================================
+   LIGHTBOX MODAL UNTUK GALERI
+   ========================================== */
+.lightbox-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 1.5rem;
+}
+
+.lightbox-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 85vh;
+  transform: scale(0.92);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.lightbox-modal.active .lightbox-content {
+  transform: scale(1);
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+  z-index: 10001;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* ==========================================
+   BOTTOM NAVIGATION BAR
+   ========================================== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateZ(0);
+  width: 100%;
+  max-width: 500px;
+  height: var(--nav-height);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(197, 168, 128, 0.28);
+  box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 999;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  padding: 0 0.5rem;
+}
+
+.bottom-nav.hidden {
+  transform: translate(-50%, 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--text-muted);
+  flex: 1;
+  height: 100%;
+  gap: 3px;
+  transition: color 0.2s ease;
+}
+
+.nav-item svg {
+  transition: transform 0.2s ease;
+}
+
+.nav-item span {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  color: var(--gold-dark);
+}
+
+.nav-item.active svg {
+  transform: translateY(-2px);
+  stroke: var(--gold-primary);
+}
+
+.nav-item.active span {
+  font-weight: 700;
+}

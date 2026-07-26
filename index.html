@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Wedding of Bimi & Yunita</title>
+  
+  <!-- Open Graph Meta Tags for WhatsApp & Social Media Preview -->
+  <meta property="og:title" content="The Wedding of Bimi & Yunita">
+  <meta property="og:description" content="Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada pernikahan kami.">
+  <meta property="og:image" content="https://weddingbimiyunita.github.io/AssetsBackground/AWAL%20DAN%20BACKGROUND%20TRANSPARAN.webp">
+  <meta property="og:url" content="https://weddingbimiyunita.github.io/">
+  <meta property="og:type" content="website">
+  
+  <!-- SEO & Theme Meta Tags -->
+  <meta name="description" content="Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada pernikahan kami.">
+  <meta name="theme-color" content="#f8f9fa">
+  
+  <!-- Preconnect ke Google Fonts agar pengunduhan font lebih cepat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+
+  <!-- Background Music Audio Element -->
+  <audio id="bg-music" loop preload="none">
+    <source src="jalaraning-tresna-ilham-pradana-official-music-video-puspita-kang-manis-ayu.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Floating Audio Control Button -->
+  <button id="music-btn" class="music-btn hidden" aria-label="Play/Pause Music">
+    <div class="music-disc">
+      <svg class="icon-note" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V5l12-2v13"></path>
+        <circle cx="6" cy="18" r="3"></circle>
+        <circle cx="18" cy="16" r="3"></circle>
+      </svg>
+    </div>
+  </button>
+
+  <!-- COVER PEMBUKA (Envelope Modal) -->
+  <div id="cover-modal" class="cover-modal">
+    <div class="cover-content">
+      <div class="cover-badge">Undangan Pernikahan</div>
+      
+      <!-- Desain Opening Modern Tanpa Bingkai Kaku -->
+      <div class="cover-portrait-wrap">
+        <img src="https://weddingbimiyunita.github.io/AssetsBackground/AWAL%20DAN%20BACKGROUND%20TRANSPARAN.webp" alt="Bimi & Yunita" class="cover-photo-frameless" decoding="async" fetchpriority="high">
+        <div class="portrait-glow"></div>
+      </div>
+
+      <h1 class="wedding-title">The Wedding of<br><span>Bimi &amp; Yunita</span></h1>
+      
+      <div class="guest-card">
+        <p class="guest-salutation">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+        <div id="guest-name" class="guest-name">Tamu Undangan</div>
+        <p class="guest-note">Mohon maaf apabila ada kesalahan penulisan nama/gelar</p>
+      </div>
+
+      <button id="open-btn" class="btn-open-invitation">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
+        </svg>
+        <span>Buka Undangan</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN INVITATION CONTAINER (Mobile-First Layout) -->
+  <main id="main-container" class="main-container">
+    <div class="bg-overlay"></div>
+
+    <!-- 1. SALAM PEMBUKA -->
+    <section id="salam-pembuka" class="section-mempelai reveal">
+      <div class="section-header">
+        <p class="salam-arabic" lang="ar">اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ</p>
+        <p class="salam-latin">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
+        <p class="pembuka-text">
+          Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i dalam acara pernikahan kami
+        </p>
+      </div>
+    </section>
+
+    <!-- 2. HADITS / QS AR-RUM -->
+    <section class="section-quran reveal">
+      <div class="quran-card">
+        <div class="quran-ornament">
+          <span>&ldquo;</span>
+        </div>
+        <p class="quran-arabic" lang="ar">
+          وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ
+        </p>
+        <p class="quran-translation">
+          "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir."
+        </p>
+        <div class="quran-surah">(QS. Ar-Rum: 21)</div>
+      </div>
+    </section>
+
+    <!-- 3. MEMPELAI -->
+    <section id="mempelai" class="section-mempelai-profil reveal">
+      <!-- Profil Mempelai Pria -->
+      <div class="profile-card groom-card reveal">
+        <div class="photo-frame-oval">
+          <img src="https://weddingbimiyunita.github.io/AssetsFoto/ARI%20BIMI%20SUHENDRA.webp" alt="Ari Bimi Suhendra" loading="lazy" decoding="async">
+          <div class="golden-ring-oval"></div>
+        </div>
+        <h2 class="bride-name groom-name">Ari Bimi Suhendra</h2>
+        <p class="parents-text">Putra ke-2 dari Bapak Sukatno dan Ibu Artimah</p>
+      </div>
+
+      <div class="ampersand-divider reveal">
+        <span>&amp;</span>
+      </div>
+
+      <!-- Profil Mempelai Wanita -->
+      <div class="profile-card bride-card reveal">
+        <div class="photo-frame-oval">
+          <img src="https://weddingbimiyunita.github.io/AssetsFoto/YUNITA%20WAHYU%20NUR%20WAKHIDA.webp" alt="Yunita Wahyu Nur Wakhida" loading="lazy" decoding="async">
+          <div class="golden-ring-oval"></div>
+        </div>
+        <h2 class="bride-name one-line-name">Yunita Wahyu Nur Wakhida</h2>
+        <p class="parents-text">Putri ke-1 dari Bapak Abu Mansur dan Ibu Izaidah</p>
+      </div>
+    </section>
+
+    <!-- 4. ACARA -->
+    <section id="acara" class="section-acara reveal">
+      <div class="section-title-wrap">
+        <span class="sub-heading">Rangkaian Acara</span>
+        <h2 class="heading-title">Waktu &amp; Tempat</h2>
+      </div>
+
+      <p class="intro-acara">
+        Dengan memohon rahmat dan ridho Allah Subhanahu Wa Ta'ala, InsyaAllah kami akan menyelenggarakan acara:
+      </p>
+      
+      <div class="event-card-unified reveal">
+        <div class="event-circle-bg">
+          <img src="https://weddingbimiyunita.github.io/AssetsBackground/AWAL%20DAN%20BACKGROUND%20TRANSPARAN.webp" alt="Ornament Latar Belakang" loading="lazy" decoding="async">
+        </div>
+
+        <!-- Akad Nikah -->
+        <div class="event-item">
+          <h3 class="event-title">Akad Nikah</h3>
+          <p class="event-date">Sabtu, 22 Agustus 2026</p>
+          <p class="event-time">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Pukul 08:00 WIB - 09:00 WIB
+          </p>
+        </div>
+
+        <div class="event-divider-line">
+          <span class="divider-icon">✦</span>
+        </div>
+
+        <!-- Resepsi -->
+        <div class="event-item">
+          <h3 class="event-title">Resepsi</h3>
+          <p class="event-date">Sabtu, 22 Agustus 2026</p>
+          <p class="event-time">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Pukul 10:00 - 13:00 WIB
+          </p>
+        </div>
+      </div>
+
+      <!-- Countdown Timer -->
+      <div class="countdown-section reveal">
+        <h4 class="countdown-title">Menuju Hari Bahagia</h4>
+        <div id="countdown" class="countdown-grid">
+          <div class="timer-box">
+            <span id="days" class="timer-value">00</span>
+            <span class="timer-label">Hari</span>
+          </div>
+          <div class="timer-box">
+            <span id="hours" class="timer-value">00</span>
+            <span class="timer-label">Jam</span>
+          </div>
+          <div class="timer-box">
+            <span id="minutes" class="timer-value">00</span>
+            <span class="timer-label">Menit</span>
+          </div>
+          <div class="timer-box">
+            <span id="seconds" class="timer-value">00</span>
+            <span class="timer-label">Detik</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. LOKASI -->
+    <section id="lokasi" class="section-lokasi reveal">
+      <div class="location-card">
+        <div class="location-icon">
+          <svg viewBox="0 0 24 24" width="40" height="40" stroke="var(--gold-primary)" stroke-width="1.8" fill="none">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </div>
+        <h3 class="location-heading">Lokasi &amp; Peta</h3>
+        <p class="location-desc">Klik tombol di bawah untuk menyimpan pengingat di kalender Anda atau membuka navigasi arah melalui Google Maps.</p>
+        
+        <div class="quick-action-buttons">
+          <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=The+Wedding+of+Bimi+%26+Yunita&dates=20260822T010000Z/20260822T060000Z&details=Akad+Nikah:+08:00-09:00+WIB%0AResepsi:+10:00-13:00+WIB%0ATanpa+mengurangi+rasa+hormat,+kami+mengundang+Bapak/Ibu/Saudara/i+untuk+hadir+dan+memberikan+doa+restu.+Terima+kasih.&location=https://maps.app.goo.gl/MRQWGRT8N4UxwF5H8" target="_blank" rel="noopener noreferrer" class="btn btn-calendar">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span>Simpan ke Google Calendar</span>
+          </a>
+
+          <a href="https://maps.app.goo.gl/MRQWGRT8N4UxwF5H8" target="_blank" rel="noopener noreferrer" class="btn btn-maps">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+            </svg>
+            <span>Buka Google Maps</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. GALERI FOTO ( 1 x 1 Scroll Down dalam Satu Bingkai dengan 5 Foto ) -->
+    <section id="galeri" class="section-galeri reveal">
+      <div class="section-title-wrap">
+        <span class="sub-heading">Potret Kenangan</span>
+        <h2 class="heading-title">Galeri Foto</h2>
+      </div>
+      
+      <div class="gallery-single-frame">
+        <div class="gallery-viewport" id="gallery-viewport">
+          <!-- Foto 1 -->
+          <div class="gallery-slide" data-index="0" data-src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%201.webp">
+            <img src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%201.webp" alt="Galeri Bimi & Yunita 1" loading="lazy" decoding="async">
+            <div class="gallery-hover-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28" stroke="white" stroke-width="2" fill="none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </div>
+            <span class="slide-badge">1 / 5</span>
+          </div>
+          
+          <!-- Foto 2 -->
+          <div class="gallery-slide" data-index="1" data-src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%202.webp">
+            <img src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%202.webp" alt="Galeri Bimi & Yunita 2" loading="lazy" decoding="async">
+            <div class="gallery-hover-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28" stroke="white" stroke-width="2" fill="none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </div>
+            <span class="slide-badge">2 / 5</span>
+          </div>
+          
+          <!-- Foto 3 -->
+          <div class="gallery-slide" data-index="2" data-src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%203.webp">
+            <img src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%203.webp" alt="Galeri Bimi & Yunita 3" loading="lazy" decoding="async">
+            <div class="gallery-hover-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28" stroke="white" stroke-width="2" fill="none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </div>
+            <span class="slide-badge">3 / 5</span>
+          </div>
+          
+          <!-- Foto 4 -->
+          <div class="gallery-slide" data-index="3" data-src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%204.webp">
+            <img src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%204.webp" alt="Galeri Bimi & Yunita 4" loading="lazy" decoding="async">
+            <div class="gallery-hover-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28" stroke="white" stroke-width="2" fill="none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </div>
+            <span class="slide-badge">4 / 5</span>
+          </div>
+
+          <!-- Foto 5 -->
+          <div class="gallery-slide" data-index="4" data-src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%205.webp">
+            <img src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%205.webp" alt="Galeri Bimi & Yunita 5" loading="lazy" decoding="async">
+            <div class="gallery-hover-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28" stroke="white" stroke-width="2" fill="none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </div>
+            <span class="slide-badge">5 / 5</span>
+          </div>
+
+          <!-- Foto Kloning untuk Seamless Infinite Loop (Kembali ke Foto 1) -->
+          <div class="gallery-slide clone-slide" data-index="5" data-src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%201.webp" data-clone="true">
+            <img src="https://weddingbimiyunita.github.io/AssetsGaleri/GALERI%201.webp" alt="Galeri Bimi & Yunita 1" loading="lazy" decoding="async">
+            <div class="gallery-hover-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28" stroke="white" stroke-width="2" fill="none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </div>
+            <span class="slide-badge">1 / 5</span>
+          </div>
+        </div>
+
+        <!-- Tombol Indikator Dots Melayang di Sisi Kanan (5 Titik) -->
+        <div class="gallery-indicators">
+          <button class="indicator-dot active" data-target="0" aria-label="Foto 1"></button>
+          <button class="indicator-dot" data-target="1" aria-label="Foto 2"></button>
+          <button class="indicator-dot" data-target="2" aria-label="Foto 3"></button>
+          <button class="indicator-dot" data-target="3" aria-label="Foto 4"></button>
+          <button class="indicator-dot" data-target="4" aria-label="Foto 5"></button>
+        </div>
+      </div>
+
+      <!-- Petunjuk Scroll Tanpa Batas (Infinite Scroll Loop) -->
+      <div class="gallery-footer-controls">
+        <p class="scroll-hint-text">
+          <span class="bounce-arrow">↓</span> Scroll foto ke bawah untuk bergulir ke seluruh kenangan
+        </p>
+      </div>
+    </section>
+
+    <!-- 7. RSVP (UCAPAN & DOA SAJA) -->
+    <section id="rsvp" class="section-rsvp reveal">
+      <div class="section-title-wrap">
+        <span class="sub-heading">Kirim Doa Restu</span>
+        <h2 class="heading-title">Ucapan &amp; Doa</h2>
+      </div>
+
+      <div class="rsvp-card">
+        <p class="rsvp-intro">Tuliskan doa serta ucapan selamat terbaik Anda untuk kedua mempelai di hari bahagia ini.</p>
+        
+        <form id="rsvp-form" class="rsvp-form">
+          <div class="form-group">
+            <label for="rsvp-name">Nama Anda</label>
+            <input type="text" id="rsvp-name" placeholder="Tuliskan nama Anda / keluarga" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="rsvp-message">Ucapan &amp; Doa Restu</label>
+            <textarea id="rsvp-message" rows="4" placeholder="Tuliskan doa restu dan ucapan kebahagiaan untuk mempelai..." required></textarea>
+          </div>
+
+          <!-- Tombol kirim terhubung sistem spreadsheet/lokal -->
+          <button type="submit" class="btn-submit-rsvp">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            <span>Kirim Ucapan</span>
+          </button>
+        </form>
+
+        <!-- Wadah Menampilkan Daftar Ucapan (Live Feed) -->
+        <div class="wish-list-wrap">
+          <h4 class="wish-heading">Doa &amp; Ucapan Teman/Kerabat:</h4>
+          <div id="wish-list" class="wish-list">
+            <!-- Data ucapan akan muncul di sini secara dinamis apabila sudah ada yang mengucapkan -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. DOA UNTUK PENGANTIN (HR. Abu Daud) -->
+    <section class="section-doa-pengantin reveal">
+      <div class="doa-card">
+        <div class="quran-ornament">
+          <span>❖</span>
+        </div>
+        <h3 class="doa-heading-title">Doa Untuk Pengantin</h3>
+        <p class="quran-arabic" lang="ar">
+          بَارَكَ اللهُ لَكَ وَبَارَكَ عَلَيْكَ وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ
+        </p>
+        <p class="quran-translation">
+          “Semoga Allah memberkahimu di waktu bahagia dan di waktu susah, serta semoga Allah mempersatukan kalian berdua dalam kebaikan.”
+        </p>
+        <div class="quran-surah">(HR. Abu Daud no. 2130)</div>
+      </div>
+    </section>
+
+    <!-- 9. PENUTUP & SALAM -->
+    <section class="section-penutup reveal">
+      <div class="penutup-content">
+        <p class="penutup-text">
+          Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan do'a restu.<br>
+          Atas kehadiran dan doa restunya Kami ucapkan terimakasih.
+        </p>
+        
+        <p class="salam-penutup-arabic" lang="ar">وَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ</p>
+        <p class="salam-penutup-latin">Wassalamu'alaikum Warahmatullahi Wabarakatuh</p>
+        
+        <div class="closing-couple-names">
+          <p class="kami-yang">Kami yang berbahagia,</p>
+          <h2 class="couple-signature">Bimi &amp; Yunita</h2>
+          <p class="couple-family">Beserta Keluarga Besar</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER (PALING BAWAH) -->
+    <footer class="site-footer">
+      <div class="footer-content">
+        <p class="copyright-text">Copyright &copy; 2026 by Bimi &amp; Yunita</p>
+      </div>
+    </footer>
+  </main>
+
+  <!-- LIGHTBOX MODAL UNTUK GALERI -->
+  <div id="lightbox-modal" class="lightbox-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <button id="lightbox-close" class="lightbox-close" aria-label="Tutup Galeri">
+      <svg viewBox="0 0 24 24" width="28" height="28" stroke="white" stroke-width="2.5" fill="none">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="Galeri Fullscreen">
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION BAR (Melayang di Bawah Layar) -->
+  <nav id="bottom-nav" class="bottom-nav hidden" aria-label="Navigasi Utama">
+    <a href="#mempelai" class="nav-item active" data-section="mempelai">
+      <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+      <span>Mempelai</span>
+    </a>
+    
+    <a href="#acara" class="nav-item" data-section="acara">
+      <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <span>Acara</span>
+    </a>
+
+    <a href="#lokasi" class="nav-item" data-section="lokasi">
+      <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+        <circle cx="12" cy="10" r="3"></circle>
+      </svg>
+      <span>Lokasi</span>
+    </a>
+
+    <a href="#galeri" class="nav-item" data-section="galeri">
+      <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+        <polyline points="21 15 16 10 5 21"></polyline>
+      </svg>
+      <span>Galeri</span>
+    </a>
+
+    <a href="#rsvp" class="nav-item" data-section="rsvp">
+      <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span>Ucapan</span>
+    </a>
+  </nav>
+
+  <!-- Bunga di Sudut Kiri Bawah (Lapisan Atas / Tetap Muncul di Setiap Page) -->
+  <img src="https://weddingbimiyunita.github.io/AssetsBackground/FOTO%20BUNGA.png" alt="Ornament Bunga Kiri Bawah" class="bg-flower-bottom-left" aria-hidden="true" decoding="async">
+
+  <!-- JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>

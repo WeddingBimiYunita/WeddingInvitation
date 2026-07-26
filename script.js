@@ -384,6 +384,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             addWishToDOM(name, message, timeStr, false);
             loadedCount++;
+            if (loadedCount >= 33) break; // Batasi maksimal 33 ucapan terbaru agar web super ringan!
           }
         }
 
@@ -396,7 +397,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Fallback muat dari localStorage bila koneksi offline atau sheet masih belum di-set publik view
     const savedWishes = JSON.parse(localStorage.getItem("wedding_wishes_bimi_yunita") || "[]");
     wishList.innerHTML = "";
-    savedWishes.forEach((wish) => {
+    savedWishes.slice(0, 33).forEach((wish) => {
       addWishToDOM(wish.name, wish.message, wish.time, false);
     });
   }
@@ -423,6 +424,11 @@ document.addEventListener("DOMContentLoaded", function () {
       wishList.insertBefore(item, wishList.firstChild);
     } else {
       wishList.appendChild(item);
+    }
+
+    // Pastikan item di DOM tidak pernah melebihi 33 agar rendering di HP selalu super cepat dan ringan
+    while (wishList.children.length > 33) {
+      wishList.removeChild(wishList.lastChild);
     }
   }
 

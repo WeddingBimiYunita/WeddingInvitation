@@ -134,7 +134,17 @@ body.invitation-opened .bg-flower-bottom-left,
 .main-container > footer {
   position: relative;
   z-index: 2; /* Teks & kartu berada dengan mulus di atas background page */
-  padding: 3.5rem 1.5rem;
+  padding: 1.6rem 1.25rem; /* Jarak spasi antar konten distandarkan agar ringkas, harmonis & tidak terlalu jauh */
+}
+
+/* Pengaturan khusus jarak Salam Pembuka agar langsung berdekatan dengan boks Ayat Al-Quran */
+#salam-pembuka {
+  padding-top: 2.4rem !important;
+  padding-bottom: 0.3rem !important;
+}
+
+#salam-pembuka .section-header {
+  margin-bottom: 0 !important;
 }
 
 /* Foto Background Transparan di Dalam Container Box (Acara, Lokasi, Galeri, Ucapan, Quran, Penutup) 
@@ -145,15 +155,15 @@ body.invitation-opened .bg-flower-bottom-left,
 .rsvp-card,
 .quran-card,
 .penutup-content {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.80) 0%, rgba(248, 245, 239, 0.86) 100%),
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(248, 245, 239, 0.88) 100%),
               url('https://weddingbimiyunita.github.io/AssetsBackground/AWAL%20DAN%20BACKGROUND%20TRANSPARAN.webp') !important;
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(4px); /* Optimasi ringan: blur 4px sangat mulus di GPU HP murah maupun mahal */
+  -webkit-backdrop-filter: blur(4px);
   box-shadow: var(--shadow-soft);
-  transition: transform 0.3s ease, opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 0.3s ease, opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* ==========================================
@@ -161,16 +171,16 @@ body.invitation-opened .bg-flower-bottom-left,
    ========================================== */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), 
-              transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translateY(22px);
+  transition: opacity 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: opacity, transform;
 }
 
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
-  will-change: auto; /* Bersihkan memori GPU setelah selesai animasi */
+  will-change: auto; /* Bersihkan memori GPU setelah selesai animasi agar RAM HP tetap leluasa */
 }
 
 /* ==========================================
@@ -453,13 +463,13 @@ body.invitation-opened .bg-flower-bottom-left,
 
 .profile-card {
   background: var(--bg-card);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  padding: 2.2rem 1.2rem;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 1.8rem 1.2rem;
   border-radius: var(--radius-lg);
   border: 1px solid rgba(197, 168, 128, 0.25);
   box-shadow: var(--shadow-soft);
-  margin: 1.5rem 0;
+  margin: 1rem 0; /* Diperdekat dari 1.5rem agar rapi dan kompak */
   position: relative;
   transition: transform 0.3s ease;
   overflow: hidden;
@@ -527,7 +537,7 @@ body.invitation-opened .bg-flower-bottom-left,
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 1rem 0;
+  margin: 0.4rem 0; /* Spasi diperdekat agar kartu kedua mempelai terlihat serah-terima lebih harmonis */
 }
 
 .ampersand-divider span {
@@ -967,14 +977,16 @@ body.invitation-opened .bg-flower-bottom-left,
    ========================================== */
 .section-quran {
   text-align: center;
+  padding-top: 0.4rem !important; /* Diperdekat maksimal dengan salam pembuka */
+  padding-bottom: 1.4rem !important;
 }
 
 .quran-card {
   background: var(--bg-card);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border: 1px solid var(--gold-primary);
-  padding: 2.5rem 1.5rem;
+  padding: 1.8rem 1.25rem !important; /* Spasi boks diperingkas agar elegan */
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
 }
@@ -1211,9 +1223,10 @@ body.invitation-opened .bg-flower-bottom-left,
 
 .doa-card {
   background: var(--bg-card);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border: 1px solid var(--gold-primary);
-  padding: 2.5rem 1.5rem;
+  padding: 1.8rem 1.25rem; /* Peringkas spasi doa pengantin agar manis dan proporsional */
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
 }

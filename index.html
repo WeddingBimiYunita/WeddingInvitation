@@ -21,8 +21,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Stylesheet (Dilapisi versi anti-cache untuk rilis final super ringan) -->
-  <link rel="stylesheet" href="style.css?v=3.0">
+  <!-- Stylesheet (Dilapisi versi anti-cache v3.2) -->
+  <link rel="stylesheet" href="style.css?v=3.2">
 </head>
 <body class="locked">
 
@@ -352,30 +352,20 @@
       </div>
 
       <div class="rsvp-card">
-        <p class="rsvp-intro">Tuliskan doa serta ucapan selamat terbaik Anda untuk kedua mempelai di hari bahagia ini.</p>
+        <p class="rsvp-intro">Tuliskan doa restu, ucapan selamat, serta konfirmasi kehadiran Anda pada acara pernikahan kami.</p>
         
-        <form id="rsvp-form" class="rsvp-form">
-          <div class="form-group">
-            <label for="rsvp-name">Nama Anda</label>
-            <input type="text" id="rsvp-name" placeholder="Tuliskan nama Anda / keluarga" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="rsvp-message">Ucapan &amp; Doa Restu</label>
-            <textarea id="rsvp-message" rows="4" placeholder="Tuliskan doa restu dan ucapan kebahagiaan untuk mempelai..." required></textarea>
-          </div>
-
-          <!-- Tombol kirim terhubung sistem spreadsheet/lokal -->
-          <button type="submit" class="btn-submit-rsvp">
-            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        <!-- Tombol Pemicu Modal RSVP (Menggantikan Form Terbuka di Halaman) -->
+        <div class="open-rsvp-btn-wrap">
+          <button type="button" id="btn-open-rsvp-modal" class="btn-open-rsvp">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.2" fill="none">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
             </svg>
-            <span>Kirim Ucapan</span>
+            <span>Tulis Doa &amp; Konfirmasi RSVP</span>
           </button>
-        </form>
+        </div>
 
-        <!-- Wadah Menampilkan Daftar Ucapan (Live Feed) -->
+        <!-- Wadah Menampilkan Daftar Ucapan (Hanya Tampilkan Nama & Doa Saja Sesuai Request) -->
         <div class="wish-list-wrap">
           <h4 class="wish-heading">Doa &amp; Ucapan Teman/Kerabat:</h4>
           <div id="wish-list" class="wish-list">
@@ -428,6 +418,53 @@
       </div>
     </footer>
   </main>
+
+  <!-- RSVP FORM MODAL (Muncul saat tombol Tulis Doa & Konfirmasi RSVP diklik) -->
+  <div id="rsvp-modal-overlay" class="rsvp-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="rsvp-modal-box">
+      <button id="btn-close-rsvp-modal" class="rsvp-modal-close" aria-label="Tutup Form">&times;</button>
+      <div class="rsvp-modal-header">
+        <span class="sub-heading">Konfirmasi Kehadiran</span>
+        <h3 class="heading-title modal-title">Form RSVP &amp; Doa</h3>
+        <p class="modal-subtitle">Data kehadiran ini khusus untuk database internal mempelai.</p>
+      </div>
+
+      <form id="rsvp-form" class="rsvp-form-modal">
+        <div class="form-group">
+          <label for="rsvp-name">Nama Lengkap / Keluarga <span class="required">*</span></label>
+          <input type="text" id="rsvp-name" placeholder="Contoh: Bpk. Andi &amp; Keluarga" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="rsvp-attendance">Konfirmasi Kehadiran <span class="required">*</span></label>
+          <select id="rsvp-attendance" required>
+            <option value="" disabled selected>-- Pilih Status Kehadiran --</option>
+            <option value="Hadir">Hadir</option>
+            <option value="Tidak Hadir">Mohon Maaf Belum Bisa Hadir</option>
+            <option value="Ragu-ragu">Masih Ragu / Menyesuaikan</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="wrap-guest-count">
+          <label for="rsvp-guest-count">Jumlah Tamu <span style="font-weight: 400; font-style: italic; color: var(--text-muted);">(Bila hadir)</span></label>
+          <input type="text" id="rsvp-guest-count" placeholder="Contoh: 2 Orang / Bersama Keluarga">
+        </div>
+
+        <div class="form-group">
+          <label for="rsvp-message">Ucapan &amp; Doa Restu <span class="required">*</span></label>
+          <textarea id="rsvp-message" rows="4" placeholder="Tuliskan doa serta harapan terbaik untuk Bimi &amp; Yunita..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit-rsvp">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          <span>Kirim Ucapan &amp; RSVP</span>
+        </button>
+      </form>
+    </div>
+  </div>
 
   <!-- LIGHTBOX MODAL UNTUK GALERI -->
   <div id="lightbox-modal" class="lightbox-modal" role="dialog" aria-modal="true" aria-hidden="true">
@@ -489,7 +526,7 @@
   <!-- Bunga di Sudut Kiri Bawah (Lapisan Atas / Tetap Muncul di Setiap Page) -->
   <img src="https://weddingbimiyunita.github.io/AssetsBackground/FOTO%20BUNGA.png" alt="Ornament Bunga Kiri Bawah" class="bg-flower-bottom-left" aria-hidden="true" decoding="async">
 
-  <!-- JavaScript File (Dilapisi versi anti-cache untuk rilis final super ringan) -->
-  <script src="script.js?v=3.0"></script>
+  <!-- JavaScript File (Dilapisi versi anti-cache v3.2) -->
+  <script src="script.js?v=3.2"></script>
 </body>
 </html>

@@ -329,8 +329,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Konfigurasi Database Google Sheets Internal (Hanya untuk konsumsi API balik layar)
   const SPREADSHEET_ID = "16p0efLJCbYnOFINDr2jORUhy-UK06YPUTACBFkM2U4U";
   
-  // (OPSIONAL) Untuk mencatat pesan baru dari tamu langsung ke Spreadsheet secara otomatis,
-  // silakan paste URL Web App Google Apps Script hasil deploy ke variabel ini:
+  // URL Web App Google Apps Script hasil deploy Anda:
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhsisva-BVvRhebeh3OQHjTTauXal3MwI8uJVx8wGIZVjIg8MB824U2109v-C3SQE/exec"; 
 
   // Muat ucapan dari Google Sheets secara langsung (agar jika mempelai menghapus doa yang kurang sesuai di sheet, 
@@ -357,18 +356,24 @@ document.addEventListener("DOMContentLoaded", function () {
           const row = rows[i].c;
           if (!row) continue; // Lewati baris kosong
           
-          // Mengecek dan menyesuaikan letak kolom (Baik format: Kolom A=Waktu, B=Nama, C=Ucapan atau sebaliknya)
           let timeStr = "Hari ini";
           let name = "";
           let message = "";
           
-          if (row.length >= 3 && row[1] && row[2]) {
-            // Kolom A = Timestamp, Kolom B = Nama Tamu, Kolom C = Ucapan & Doa
+          if (row.length >= 3 && row[1]) {
             timeStr = row[0]?.v || row[0]?.f || "Hari ini";
             name = row[1]?.v || "";
-            message = row[2]?.v || "";
+            
+            // Logika pintar: Cek apakah kolom C (index 2) adalah status kehadiran (Hadir / Tidak Hadir / Ragu-ragu)
+            const col2Str = String(row[2]?.v || "");
+            if (col2Str.includes("Hadir") || col2Str.includes("Ragu") || col2Str.includes("Orang")) {
+              // Format lengkap 5 kolom: A=Timestamp, B=Nama, C=Kehadiran, D=Jumlah Tamu, E=Ucapan (atau 4 kolom: A, B, C, D=Ucapan)
+              message = row[4]?.v || row[3]?.v || "";
+            } else {
+              // Format 3 kolom standar sebelumnya: A=Timestamp, B=Nama, C=Ucapan
+              message = row[2]?.v || "";
+            }
           } else if (row.length === 2 && row[0] && row[1]) {
-            // Kolom A = Nama Tamu, Kolom B = Ucapan & Doa
             name = row[0]?.v || "";
             message = row[1]?.v || "";
           } else if (row[0]) {
@@ -376,12 +381,12 @@ document.addEventListener("DOMContentLoaded", function () {
             message = row[1]?.v || "Selamat berbahagia!";
           }
           
-          // Cek jangan tampilkan jika baris tersebut adalah Header tabel (seperti kata "Nama", "Timestamp", atau "Ucapan")
+          // Cek jangan tampilkan jika baris tersebut adalah Header tabel (seperti kata "Nama", "Timestamp", "Kehadiran", atau "Ucapan")
           if (name && message && name.toLowerCase() !== "nama" && name.toLowerCase() !== "nama tamu" && name.toLowerCase() !== "timestamp") {
-            // Bersihkan format timestamp berlebih menjadi tanggal/jam yang ringkas jika berupa teks panjang
             if (typeof timeStr === "string" && timeStr.startsWith("Date(")) {
               timeStr = "Hari ini";
             }
+            // HANYA NAMA dan UCAPAN yang dimasukkan ke DOM undangan (Kehadiran & jumlah tamu tetap privasi di database spreadsheet!)
             addWishToDOM(name, message, timeStr, false);
             loadedCount++;
             if (loadedCount >= 33) break; // Batasi maksimal 33 ucapan terbaru agar web super ringan!
@@ -391,10 +396,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (loadedCount > 0) return; // Jika sukses memuat dari Sheet online, hentikan di sini!
       }
     } catch (err) {
-      console.warn("Gagal memuat langsung dari Google Sheets (Mungkin akses 'Anyone with link / Siapa saja memiliki link' belum diaktifkan di Google Sheets Anda), beralih memuat dari cache localStorage:", err);
+      console.warn("Gagal memuat dari Google Sheets (mungkin koneksi offline), beralih memuat dari cache localStorage:", err);
     }
 
-    // Fallback muat dari localStorage bila koneksi offline atau sheet masih belum di-set publik view
+    // Fallback muat dari localStorage
     const savedWishes = JSON.parse(localStorage.getItem("wedding_wishes_bimi_yunita") || "[]");
     wishList.innerHTML = "";
     savedWishes.slice(0, 33).forEach((wish) => {
@@ -409,6 +414,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     const initial = name.trim().charAt(0).toUpperCase() || "T";
     
+    // Hanya menampilkan Nama Tamu dan Ucapan Doa Restu
     item.innerHTML = `
       <div class="wish-avatar">${initial}</div>
       <div class="wish-text-wrap">
@@ -426,7 +432,7 @@ document.addEventListener("DOMContentLoaded", function () {
       wishList.appendChild(item);
     }
 
-    // Pastikan item di DOM tidak pernah melebihi 33 agar rendering di HP selalu super cepat dan ringan
+    // Pastikan item di DOM tidak pernah melebihi 33 agar rendering selalu ringan
     while (wishList.children.length > 33) {
       wishList.removeChild(wishList.lastChild);
     }
@@ -443,21 +449,80 @@ document.addEventListener("DOMContentLoaded", function () {
     return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
   }
 
+  /* ==========================================================================
+     9. MODAL RSVP HANDLING & DYNAMICS
+     ========================================================================== */
+  const btnOpenRsvpModal = document.getElementById("btn-open-rsvp-modal");
+  const btnCloseRsvpModal = document.getElementById("btn-close-rsvp-modal");
+  const rsvpModalOverlay = document.getElementById("rsvp-modal-overlay");
+  const rsvpAttendance = document.getElementById("rsvp-attendance");
+  const rsvpGuestCount = document.getElementById("rsvp-guest-count");
+  const wrapGuestCount = document.getElementById("wrap-guest-count");
+
+  if (btnOpenRsvpModal && rsvpModalOverlay) {
+    btnOpenRsvpModal.addEventListener("click", () => {
+      rsvpModalOverlay.classList.add("active");
+      rsvpModalOverlay.setAttribute("aria-hidden", "false");
+    });
+  }
+
+  function closeRsvpModal() {
+    if (rsvpModalOverlay) {
+      rsvpModalOverlay.classList.remove("active");
+      rsvpModalOverlay.setAttribute("aria-hidden", "true");
+    }
+  }
+
+  if (btnCloseRsvpModal) {
+    btnCloseRsvpModal.addEventListener("click", closeRsvpModal);
+  }
+
+  if (rsvpModalOverlay) {
+    rsvpModalOverlay.addEventListener("click", (e) => {
+      if (e.target === rsvpModalOverlay) {
+        closeRsvpModal();
+      }
+    });
+  }
+
+  // Dinamika form: Jika tamu memilih 'Tidak Hadir', sembunyikan isian Jumlah Tamu
+  if (rsvpAttendance && wrapGuestCount && rsvpGuestCount) {
+    rsvpAttendance.addEventListener("change", (e) => {
+      const val = e.target.value;
+      if (val === "Tidak Hadir") {
+        wrapGuestCount.style.display = "none";
+        rsvpGuestCount.value = "0 Orang (Tidak Hadir)";
+      } else {
+        wrapGuestCount.style.display = "flex";
+        if (rsvpGuestCount.value.includes("Tidak Hadir") || rsvpGuestCount.value === "0") {
+          rsvpGuestCount.value = "";
+        }
+      }
+    });
+  }
+
   if (rsvpForm) {
-    // Muat data dari spreadsheet seketika saat web diakses
+    // Muat data dari spreadsheet saat web pertama kali diakses
     loadWishes();
 
     rsvpForm.addEventListener("submit", function (e) {
       e.preventDefault();
       const nameInput = document.getElementById("rsvp-name");
+      const attendanceInput = document.getElementById("rsvp-attendance");
+      const guestCountInput = document.getElementById("rsvp-guest-count");
       const msgInput = document.getElementById("rsvp-message");
       const submitBtn = rsvpForm.querySelector(".btn-submit-rsvp");
 
       if (!nameInput || !msgInput) return;
       const name = nameInput.value.trim();
       const message = msgInput.value.trim();
+      const attendance = attendanceInput ? attendanceInput.value : "Hadir";
+      const guestCount = guestCountInput && guestCountInput.value.trim() ? guestCountInput.value.trim() : (attendance === "Tidak Hadir" ? "-" : "Tidak disebutkan");
 
-      if (!name || !message) return;
+      if (!name || !message || !attendance) {
+        alert("Mohon lengkapi Nama, Status Kehadiran, dan Ucapan Anda.");
+        return;
+      }
 
       if (submitBtn) {
         submitBtn.disabled = true;
@@ -466,28 +531,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const timeStr = "Baru saja";
 
-      // 1. Langsung tambahkan secara reaktif ke layar tamu saat itu juga agar terasa smooth & cepat
+      // 1. Tampilkan di undangan HANYA Nama dan Ucapan Doa saja
       addWishToDOM(name, message, timeStr, true);
 
-      // 2. Simpan juga ke cache browser setempat
+      // 2. Simpan juga ke cache browser setempat (Hanya nama & doa agar ringan)
       const savedWishes = JSON.parse(localStorage.getItem("wedding_wishes_bimi_yunita") || "[]");
       savedWishes.unshift({ name, message, time: "Hari ini" });
       localStorage.setItem("wedding_wishes_bimi_yunita", JSON.stringify(savedWishes));
 
-      // 3. Kirim ke Google Sheets di balik layar jika URL Apps Script sudah dipasang oleh mempelai!
+      // 3. Kirim DATA LENGKAP RSVP (Nama, Kehadiran, Jumlah Tamu, Doa) ke Google Sheets internal!
       if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== "INSERT_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE") {
         fetch(APPS_SCRIPT_URL, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: name, message: message, timestamp: new Date().toLocaleString("id-ID") })
+          body: JSON.stringify({
+            timestamp: new Date().toLocaleString("id-ID"),
+            name: name,
+            attendance: attendance,
+            guestCount: guestCount,
+            message: message
+          })
         }).catch(e => console.warn("Koneksi ke spreadsheet backend lambat/offline:", e));
       }
 
       setTimeout(() => {
-        // Reset form
+        // Reset form & tutup modal
         nameInput.value = "";
         msgInput.value = "";
+        if (attendanceInput) attendanceInput.selectedIndex = 0;
+        if (guestCountInput) {
+          guestCountInput.value = "";
+          if (wrapGuestCount) wrapGuestCount.style.display = "flex";
+        }
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = `
@@ -495,10 +571,11 @@ document.addEventListener("DOMContentLoaded", function () {
               <line x1="22" y1="2" x2="11" y2="13"></line>
               <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
             </svg>
-            <span>Kirim Ucapan</span>
+            <span>Kirim Ucapan &amp; RSVP</span>
           `;
         }
-        alert("Terima kasih! Ucapan dan doa restu Anda telah berhasil dikirim.");
+        closeRsvpModal();
+        alert("Terima kasih! Konfirmasi RSVP dan doa restu Anda telah berhasil dikirim.");
       }, 500);
     });
   }

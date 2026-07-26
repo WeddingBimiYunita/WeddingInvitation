@@ -1048,10 +1048,46 @@ body.invitation-opened .bg-flower-bottom-left,
   line-height: 1.6;
 }
 
-.rsvp-form {
+.open-rsvp-btn-wrap {
+  text-align: center;
+  margin: 1.2rem 0 2rem;
+}
+
+.btn-open-rsvp {
+  background: var(--gold-gradient);
+  color: #ffffff;
+  border: none;
+  padding: 0.95rem 1.8rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: var(--shadow-gold);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  width: 100%;
+  max-width: 320px;
+}
+
+.btn-open-rsvp:hover,
+.btn-open-rsvp:focus {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(197, 168, 128, 0.45);
+}
+
+.btn-open-rsvp:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.rsvp-form,
+.rsvp-form-modal {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.1rem;
 }
 
 .form-group {
@@ -1066,20 +1102,32 @@ body.invitation-opened .bg-flower-bottom-left,
   color: var(--text-dark);
 }
 
+.required {
+  color: #d9534f;
+  font-weight: bold;
+}
+
 .form-group input,
+.form-group select,
 .form-group textarea {
   font-family: var(--font-body);
   font-size: 0.92rem;
   color: var(--text-dark);
-  background: rgba(255, 255, 255, 0.9);
-  border: 1.5px solid rgba(197, 168, 128, 0.4);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(197, 168, 128, 0.45);
   border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
   outline: none;
+  width: 100%;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
+.form-group select {
+  cursor: pointer;
+}
+
 .form-group input:focus,
+.form-group select:focus,
 .form-group textarea:focus {
   border-color: var(--gold-dark);
   box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.18);
@@ -1101,7 +1149,7 @@ body.invitation-opened .bg-flower-bottom-left,
   gap: 8px;
   box-shadow: var(--shadow-gold);
   transition: transform 0.25s ease, opacity 0.25s ease;
-  margin-top: 0.5rem;
+  margin-top: 0.6rem;
 }
 
 .btn-submit-rsvp:hover,
@@ -1110,28 +1158,95 @@ body.invitation-opened .bg-flower-bottom-left,
   opacity: 0.95;
 }
 
-.sheet-info {
-  margin-top: 1.4rem;
-  text-align: center;
-  border-top: 1px dashed rgba(197, 168, 128, 0.3);
-  padding-top: 1.2rem;
-}
-
-.sheet-link {
-  display: inline-flex;
+/* ==========================================
+   MODAL RSVP & UCAPAN FORM
+   ========================================== */
+.rsvp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--gold-dark);
-  text-decoration: none;
-  transition: opacity 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 1.2rem;
 }
 
-.sheet-link:hover {
-  opacity: 0.8;
-  text-decoration: underline;
+.rsvp-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.rsvp-modal-box {
+  background-color: var(--bg-main);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 245, 239, 0.96) 100%),
+                    url('https://weddingbimiyunita.github.io/AssetsBackground/AWAL%20DAN%20BACKGROUND%20TRANSPARAN.webp');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--gold-primary);
+  border-radius: var(--radius-lg);
+  padding: 2.2rem 1.4rem 1.8rem;
+  width: 100%;
+  max-width: 440px;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+  position: relative;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  text-align: left;
+}
+
+.rsvp-modal-overlay.active .rsvp-modal-box {
+  transform: scale(1) translateY(0);
+}
+
+.rsvp-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(197, 168, 128, 0.2);
+  color: var(--gold-dark);
+  border: 1px solid rgba(197, 168, 128, 0.4);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  font-size: 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.rsvp-modal-close:hover {
+  background: var(--gold-primary);
+  color: #fff;
+}
+
+.rsvp-modal-header {
+  text-align: center;
+  margin-bottom: 1.4rem;
+}
+
+.modal-title {
+  font-size: 1.7rem !important;
+  margin-top: 4px;
+}
+
+.modal-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-style: italic;
 }
 
 .wish-list-wrap {

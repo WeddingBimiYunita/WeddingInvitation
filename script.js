@@ -321,15 +321,81 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   /* ==========================================================================
-     8. RSVP & UCAPAN FORM HANDLING (Local Storage & Reactive Feed)
+     8. RSVP & UCAPAN INTEGRATION DENGAN GOOGLE SHEETS & LOCAL STORAGE
      ========================================================================== */
   const rsvpForm = document.getElementById("rsvp-form");
   const wishList = document.getElementById("wish-list");
 
-  // Muat ucapan dari localStorage jika ada
-  function loadWishes() {
+  // Konfigurasi Database Google Sheets Internal (Hanya untuk konsumsi API balik layar)
+  const SPREADSHEET_ID = "16p0efLJCbYnOFINDr2jORUhy-UK06YPUTACBFkM2U4U";
+  
+  // (OPSIONAL) Untuk mencatat pesan baru dari tamu langsung ke Spreadsheet secara otomatis,
+  // silakan paste URL Web App Google Apps Script hasil deploy ke variabel ini:
+  const APPS_SCRIPT_URL = "INSERT_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE"; 
+
+  // Muat ucapan dari Google Sheets secara langsung (agar jika mempelai menghapus doa yang kurang sesuai di sheet, 
+  // doa tersebut juga otomatis lenyap dari layar web undangan tamu)
+  async function loadWishes() {
     if (!wishList) return;
+    
+    try {
+      // Fetch public JSON dari Google Sheets API (gviz)
+      const res = await fetch(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`);
+      const text = await res.text();
+      
+      // Google gviz mengembalikan format JSON yang dilingkupi function: /*O_o*/\ngoogle.visualization.Query.setResponse({...});
+      const jsonStr = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+      const data = JSON.parse(jsonStr);
+      
+      const rows = data?.table?.rows;
+      if (rows && rows.length > 0) {
+        wishList.innerHTML = ""; // Bersihkan kontainer untuk memuat data aktual murni dari sheet
+        
+        let loadedCount = 0;
+        // Loop dari baris paling bawah ke atas agar pesan ter-update (paling baru) berada di bagian atas
+        for (let i = rows.length - 1; i >= 0; i--) {
+          const row = rows[i].c;
+          if (!row) continue; // Lewati baris kosong
+          
+          // Mengecek dan menyesuaikan letak kolom (Baik format: Kolom A=Waktu, B=Nama, C=Ucapan atau sebaliknya)
+          let timeStr = "Hari ini";
+          let name = "";
+          let message = "";
+          
+          if (row.length >= 3 && row[1] && row[2]) {
+            // Kolom A = Timestamp, Kolom B = Nama Tamu, Kolom C = Ucapan & Doa
+            timeStr = row[0]?.v || row[0]?.f || "Hari ini";
+            name = row[1]?.v || "";
+            message = row[2]?.v || "";
+          } else if (row.length === 2 && row[0] && row[1]) {
+            // Kolom A = Nama Tamu, Kolom B = Ucapan & Doa
+            name = row[0]?.v || "";
+            message = row[1]?.v || "";
+          } else if (row[0]) {
+            name = row[0]?.v || "Tamu";
+            message = row[1]?.v || "Selamat berbahagia!";
+          }
+          
+          // Cek jangan tampilkan jika baris tersebut adalah Header tabel (seperti kata "Nama", "Timestamp", atau "Ucapan")
+          if (name && message && name.toLowerCase() !== "nama" && name.toLowerCase() !== "nama tamu" && name.toLowerCase() !== "timestamp") {
+            // Bersihkan format timestamp berlebih menjadi tanggal/jam yang ringkas jika berupa teks panjang
+            if (typeof timeStr === "string" && timeStr.startsWith("Date(")) {
+              timeStr = "Hari ini";
+            }
+            addWishToDOM(name, message, timeStr, false);
+            loadedCount++;
+          }
+        }
+
+        if (loadedCount > 0) return; // Jika sukses memuat dari Sheet online, hentikan di sini!
+      }
+    } catch (err) {
+      console.warn("Gagal memuat langsung dari Google Sheets (Mungkin akses 'Anyone with link / Siapa saja memiliki link' belum diaktifkan di Google Sheets Anda), beralih memuat dari cache localStorage:", err);
+    }
+
+    // Fallback muat dari localStorage bila koneksi offline atau sheet masih belum di-set publik view
     const savedWishes = JSON.parse(localStorage.getItem("wedding_wishes_bimi_yunita") || "[]");
+    wishList.innerHTML = "";
     savedWishes.forEach((wish) => {
       addWishToDOM(wish.name, wish.message, wish.time, false);
     });
@@ -347,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="wish-text-wrap">
         <div class="wish-header">
           <span class="wish-author">${escapeHtml(name)}</span>
-          <span class="wish-time">${escapeHtml(timeStr)}</span>
+          <span class="wish-time">${escapeHtml(String(timeStr).substring(0, 24))}</span>
         </div>
         <p class="wish-body">${escapeHtml(message)}</p>
       </div>
@@ -368,10 +434,11 @@ document.addEventListener("DOMContentLoaded", function () {
       '"': '&quot;',
       "'": '&#039;'
     };
-    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
   }
 
   if (rsvpForm) {
+    // Muat data dari spreadsheet seketika saat web diakses
     loadWishes();
 
     rsvpForm.addEventListener("submit", function (e) {
@@ -391,17 +458,27 @@ document.addEventListener("DOMContentLoaded", function () {
         submitBtn.innerHTML = "<span>Mengirim...</span>";
       }
 
+      const timeStr = "Baru saja";
+
+      // 1. Langsung tambahkan secara reaktif ke layar tamu saat itu juga agar terasa smooth & cepat
+      addWishToDOM(name, message, timeStr, true);
+
+      // 2. Simpan juga ke cache browser setempat
+      const savedWishes = JSON.parse(localStorage.getItem("wedding_wishes_bimi_yunita") || "[]");
+      savedWishes.unshift({ name, message, time: "Hari ini" });
+      localStorage.setItem("wedding_wishes_bimi_yunita", JSON.stringify(savedWishes));
+
+      // 3. Kirim ke Google Sheets di balik layar jika URL Apps Script sudah dipasang oleh mempelai!
+      if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== "INSERT_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE") {
+        fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: name, message: message, timestamp: new Date().toLocaleString("id-ID") })
+        }).catch(e => console.warn("Koneksi ke spreadsheet backend lambat/offline:", e));
+      }
+
       setTimeout(() => {
-        const timeStr = "Baru saja";
-
-        // Tambahkan langsung ke layar agar terasa reaktif dan modern
-        addWishToDOM(name, message, timeStr, true);
-
-        // Simpan ke localStorage
-        const savedWishes = JSON.parse(localStorage.getItem("wedding_wishes_bimi_yunita") || "[]");
-        savedWishes.unshift({ name, message, time: "Hari ini" });
-        localStorage.setItem("wedding_wishes_bimi_yunita", JSON.stringify(savedWishes));
-
         // Reset form
         nameInput.value = "";
         msgInput.value = "";
@@ -415,9 +492,8 @@ document.addEventListener("DOMContentLoaded", function () {
             <span>Kirim Ucapan</span>
           `;
         }
-
-        alert("Terima kasih! Ucapan dan doa restu Anda telah berhasil disimpan.");
-      }, 600);
+        alert("Terima kasih! Ucapan dan doa restu Anda telah berhasil dikirim.");
+      }, 500);
     });
   }
 });
